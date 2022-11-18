@@ -25,15 +25,11 @@ project(MyProject)
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-CPMAddPackage(
-        NAME SDL2
-        VERSION 2.24.2
-        URL "https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.24.2.zip"
-        OPTIONS "SDL2_DISABLE_INSTALL TRUE"
-)
-find_package(SDL2 REQUIRED)
+CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL
+        GIT_TAG main
+        OPTIONS "SDL2_DISABLE_INSTALL TRUE")
 
-if (SDL2_ADDED)
+if (SDL_ADDED)
     file(GLOB SDL_HEADERS "${SDL_SOURCE_DIR}/include/*.h")
 
     # Create a target that copies headers at build time, when they change
@@ -46,14 +42,29 @@ if (SDL2_ADDED)
 
     # And add the directory where headers have been copied as an interface include dir
     target_include_directories(SDL2 INTERFACE "${CMAKE_BINARY_DIR}/SDLHeaders")
-
-    MESSAGE(DEBUG "TOLSTAAAAAAAAAAAAAAAA")
-    set (SDL2_INCLUDE_DIR ${SDL2_SOURCE_DIR}/include)
 endif()
+
+# SDL_ttf
+CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_ttf
+        GIT_TAG main
+        OPTIONS "SDL2TTF_INSTALL FALSE")
+find_package(SDL_ttf REQUIRED)
+
+# SDL_image
+CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_image
+        GIT_TAG main
+        OPTIONS "SDL2IMAGE_INSTALL FALSE")
+find_package(SDL_image REQUIRED)
+
+# SDL_mixer
+CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_mixer
+        GIT_TAG main
+        OPTIONS "SDL2IMIXER_INSTALL FALSE")
+find_package(SDL_mixer REQUIRED)
 
 # add executable
 add_executable(main main.cpp)
 target_compile_features(main PRIVATE cxx_std_20)
 include_directories(${SDL2_INCLUDE_DIR})
 target_include_directories(main PRIVATE ${SDL2_INCLUDE_DIR})
-target_link_libraries(main SDL2)
+target_link_libraries(main SDL2 SDL2_ttf SDL2_image SDL2_mixer)
