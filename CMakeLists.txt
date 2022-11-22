@@ -25,10 +25,17 @@ project(MyProject)
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong") # required for opus
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong") # required for opus
+
+# SDL
+string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL
         GIT_TAG main
         OPTIONS "SDL2_DISABLE_INSTALL TRUE")
-
 if (SDL_ADDED)
     file(GLOB SDL_HEADERS "${SDL_SOURCE_DIR}/include/*.h")
 
@@ -42,29 +49,54 @@ if (SDL_ADDED)
 
     # And add the directory where headers have been copied as an interface include dir
     target_include_directories(SDL2 INTERFACE "${CMAKE_BINARY_DIR}/SDLHeaders")
+    set (SDL2_INCLUDE_DIR ${SDL2_SOURCE_DIR}/include)
+    MESSAGE(STATUS "SDL2_INCLUDE_DIR: ${SDL2_INCLUDE_DIR}")
+    add_library(SDL2::SDL2 ALIAS SDL2)
 endif()
+find_package(SDL REQUIRED)
+string(TIMESTAMP AFTER "%s")
+math(EXPR DELTASDL "${AFTER} - ${BEFORE}")
+MESSAGE(STATUS "SDL2 TIME: ${DELTASDL}s")
 
 # SDL_ttf
+string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_ttf
         GIT_TAG main
-        OPTIONS "SDL2TTF_INSTALL FALSE")
+        OPTIONS "SDL2TTF_INSTALL FALSE" "SDL2TTF_VENDORED TRUE") # vendor is required for mingw builds
 find_package(SDL_ttf REQUIRED)
+string(TIMESTAMP AFTER "%s")
+math(EXPR DELTASDL_ttf "${AFTER} - ${BEFORE}")
+MESSAGE(STATUS "SDL_ttf TIME: ${DELTASDL_ttf}s")
 
 # SDL_image
+string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_image
         GIT_TAG main
         OPTIONS "SDL2IMAGE_INSTALL FALSE")
 find_package(SDL_image REQUIRED)
+string(TIMESTAMP AFTER "%s")
+math(EXPR DELTASDL_image "${AFTER} - ${BEFORE}")
+MESSAGE(STATUS "SDL_image TIME: ${DELTASDL_image}s")
 
-# SDL_mixer
+## SDL_mixer
+string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_mixer
         GIT_TAG main
-        OPTIONS "SDL2IMIXER_INSTALL FALSE")
+        OPTIONS "SDL2IMIXER_INSTALL FALSE" "SDL2MIXER_VENDORED TRUE") # vendor is required for mingw builds
 find_package(SDL_mixer REQUIRED)
+string(TIMESTAMP AFTER "%s")
+math(EXPR DELTASDL_mixer "${AFTER} - ${BEFORE}")
+MESSAGE(STATUS "SDL_mixer TIME: ${DELTASDL_mixer}s")
+
+# summary
+MESSAGE(STATUS "######################### SUMMARY TIME #########################")
+MESSAGE(STATUS "SDL2      TIME: ${DELTASDL}s")
+MESSAGE(STATUS "SDL_ttf   TIME: ${DELTASDL_ttf}s")
+MESSAGE(STATUS "SDL_image TIME: ${DELTASDL_image}s")
+MESSAGE(STATUS "SDL_mixer TIME: ${DELTASDL_mixer}s")
 
 # add executable
 add_executable(main main.cpp)
-target_compile_features(main PRIVATE cxx_std_20)
 include_directories(${SDL2_INCLUDE_DIR})
 target_include_directories(main PRIVATE ${SDL2_INCLUDE_DIR})
 target_link_libraries(main SDL2 SDL2_ttf SDL2_image SDL2_mixer)
