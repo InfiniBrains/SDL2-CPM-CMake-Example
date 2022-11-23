@@ -33,10 +33,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong") # required fo
 
 # SDL
 string(TIMESTAMP BEFORE "%s")
-CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL
-        GIT_TAG main
-        OPTIONS "SDL2_DISABLE_INSTALL TRUE")
-if (SDL_ADDED)
+CPMAddPackage(
+        NAME SDL2
+        GITHUB_REPOSITORY libsdl-org/SDL
+        GIT_TAG release-2.26.0
+        OPTIONS "SDL2_DISABLE_INSTALL TRUE"
+)
+find_package(SDL2 REQUIRED)
+if (SDL2_ADDED)
     file(GLOB SDL_HEADERS "${SDL_SOURCE_DIR}/include/*.h")
 
     # Create a target that copies headers at build time, when they change
@@ -49,11 +53,10 @@ if (SDL_ADDED)
 
     # And add the directory where headers have been copied as an interface include dir
     target_include_directories(SDL2 INTERFACE "${CMAKE_BINARY_DIR}/SDLHeaders")
+
     set (SDL2_INCLUDE_DIR ${SDL2_SOURCE_DIR}/include)
-    MESSAGE(STATUS "SDL2_INCLUDE_DIR: ${SDL2_INCLUDE_DIR}")
-    add_library(SDL2::SDL2 ALIAS SDL2)
 endif()
-find_package(SDL REQUIRED)
+include_directories(${SDL2_INCLUDE_DIR})
 string(TIMESTAMP AFTER "%s")
 math(EXPR DELTASDL "${AFTER} - ${BEFORE}")
 MESSAGE(STATUS "SDL2 TIME: ${DELTASDL}s")
