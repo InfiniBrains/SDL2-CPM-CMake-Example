@@ -21,6 +21,12 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Rsync
+        run: apt update
+
+      - name: Rsync
+        run: apt install -y rsync
+
       - name: Emscripten Build
         run: ./scripts/emscripten-build.sh
 
