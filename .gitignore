@@ -31,7 +31,9 @@
 *.out
 *.app
 
+# binaries
 .idea/
 cmake-build-*/
 out/
 .vs/
+bin-*/

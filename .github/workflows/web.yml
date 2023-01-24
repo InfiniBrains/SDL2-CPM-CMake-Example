@@ -1,0 +1,31 @@
+name: WEB-EMSCRIPTEN
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+env:
+  BUILD_TYPE: MinSizeRel
+
+jobs:
+  linux-emscripten:
+    runs-on: ubuntu-latest
+    container: emscripten/emsdk
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Emscripten Build
+        run: ./scripts/emscripten-build.sh
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: bin-emscripten/bin/ # The folder the action should deploy.
+          single-commit: true
