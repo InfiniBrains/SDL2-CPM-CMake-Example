@@ -2,11 +2,11 @@ IF(NOT DEFINED EMSCRIPTEN)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fstack-protector-strong") # required for opus
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fstack-protector-strong") # required for opus
 
-#    set(SDL_SHARED ON CACHE BOOL "SDL_SHARED" FORCE)
-#    SET(SDL_STATIC ON CACHE BOOL "SDL_STATIC")
-#    SET(SDL_STATIC_PIC ON CACHE BOOL "SDL_STATIC_PIC")
-#    SET(INTERFACE_SDL2_SHARED OFF CACHE BOOL "INTERFACE_SDL2_SHARED" FORCE)
-#    SET(SDL_WERROR OFF CACHE BOOL "Enable -Werror on SDL. flag SDL_WERROR" FORCE)
+    set(SDL_SHARED OFF CACHE BOOL "SDL_SHARED" FORCE)
+    SET(SDL_STATIC ON CACHE BOOL "SDL_STATIC")
+    SET(SDL_STATIC_PIC ON CACHE BOOL "SDL_STATIC_PIC")
+    SET(INTERFACE_SDL2_SHARED OFF CACHE BOOL "INTERFACE_SDL2_SHARED" FORCE)
+    SET(SDL_WERROR OFF CACHE BOOL "Enable -Werror on SDL. flag SDL_WERROR" FORCE)
 ENDIF()
 
 set(SDL2IMAGE_INSTALL OFF CACHE BOOL "" FORCE)
@@ -64,7 +64,7 @@ MESSAGE(STATUS "SDL_ttf TIME: ${DELTASDL_ttf}s")
 # SDL_image
 string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_image
-        GIT_TAG release-2.6.2
+        GIT_TAG release-2.6.0
         OPTIONS "SDL2IMAGE_INSTALL FALSE")
 find_package(SDL_image REQUIRED)
 include_directories(${SDL_image_SOURCE_DIR})
@@ -76,7 +76,7 @@ MESSAGE(STATUS "SDL_image TIME: ${DELTASDL_image}s")
 ## SDL_mixer
 string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_mixer
-        GIT_TAG release-2.6.2
+        GIT_TAG release-2.6.0
         OPTIONS "SDL2IMIXER_INSTALL FALSE" "SDL2MIXER_VENDORED TRUE") # vendor is required for mingw builds
 find_package(SDL_mixer REQUIRED)
 include_directories(${SDL_mixer_SOURCE_DIR}/include)

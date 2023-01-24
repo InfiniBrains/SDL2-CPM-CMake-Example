@@ -10,8 +10,19 @@
 #include "imgui_impl_sdl.h"
 #include "imgui_impl_sdlrenderer.h"
 
-#define SCREEN_WIDTH    800
-#define SCREEN_HEIGHT   600
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
+#ifdef __EMSCRIPTEN__
+EM_JS(int, canvas_get_width, (), {
+return canvas.width;
+});
+
+EM_JS(int, canvas_get_height, (), {
+return canvas.height;
+});
+#endif
 
 int main(int argc, char* argv[]) {
     // Unused argc, argv
@@ -23,10 +34,17 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
+    auto width = 1280;
+    auto height = 720;
+#ifdef __EMSCRIPTEN__
+    width = canvas_get_width();
+    height = canvas_get_height();
+#endif
+
     // Setup window
     SDL_WindowFlags window_flags = (SDL_WindowFlags) (SDL_WINDOW_RESIZABLE | SDL_WINDOW_SHOWN);
     SDL_Window *window = SDL_CreateWindow("Dear ImGui SDL2+SDL_Renderer example", SDL_WINDOWPOS_CENTERED,
-                                          SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+                                          SDL_WINDOWPOS_CENTERED, width, height, window_flags);
 
     if (!window) {
         std::cout << "Window could not be created!" << std::endl
@@ -86,12 +104,12 @@ int main(int argc, char* argv[]) {
     SDL_Rect squareRect;
 
     // Square dimensions: Half of the min(SCREEN_WIDTH, SCREEN_HEIGHT)
-    squareRect.w = std::min(SCREEN_WIDTH, SCREEN_HEIGHT) / 2;
-    squareRect.h = std::min(SCREEN_WIDTH, SCREEN_HEIGHT) / 2;
+    squareRect.w = std::min(width, height) / 2;
+    squareRect.h = std::min(width, height) / 2;
 
     // Square position: In the middle of the screen
-    squareRect.x = SCREEN_WIDTH / 2 - squareRect.w / 2;
-    squareRect.y = SCREEN_HEIGHT / 2 - squareRect.h / 2;
+    squareRect.x = width / 2 - squareRect.w / 2;
+    squareRect.y = height / 2 - squareRect.h / 2;
 
     // Event loop
     while (!done) {
@@ -169,6 +187,8 @@ int main(int argc, char* argv[]) {
         // present ui on top of your drawings
         ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);
+
+        SDL_Delay(0);
     }
 
     // Cleanup

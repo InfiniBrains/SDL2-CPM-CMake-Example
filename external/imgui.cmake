@@ -25,8 +25,11 @@ IF(IMGUI_ADDED)
             PUBLIC ${IMGUI_SOURCE_DIR}
             PUBLIC ${IMGUI_SOURCE_DIR}/backends
             )
-
+IF(EMSCRIPTEN)
     target_link_libraries(IMGUI PUBLIC SDL2 ${CMAKE_DL_LIBS})
+ELSE()
+    target_link_libraries(IMGUI PUBLIC SDL2-static ${CMAKE_DL_LIBS})
+ENDIF()
 ENDIF()
 include_directories(${IMGUI_SOURCE_DIR} ${IMGUI_SOURCE_DIR}/backends)
 string(TIMESTAMP AFTER "%s")

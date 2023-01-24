@@ -32,4 +32,8 @@ include(external/imgui.cmake)
 
 # add executable
 add_executable(demo main.cpp)
-target_link_libraries(demo PUBLIC SDL2 SDL2_ttf SDL2_image SDL2_mixer IMGUI)
+IF(EMSCRIPTEN)
+    target_link_libraries(demo PUBLIC SDL2 SDL2_ttf SDL2_image SDL2_mixer IMGUI)
+ELSE()
+    target_link_libraries(demo PUBLIC SDL2-static SDL2_ttf SDL2_image SDL2_mixer IMGUI)
+endif()
