@@ -77,7 +77,7 @@ MESSAGE(STATUS "SDL_image TIME: ${DELTASDL_image}s")
 string(TIMESTAMP BEFORE "%s")
 CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_mixer
         GIT_TAG release-2.6.0
-        OPTIONS "SDL2IMIXER_INSTALL FALSE" "SDL2MIXER_VENDORED TRUE") # vendor is required for mingw builds
+        OPTIONS "SDL2MIXER_INSTALL FALSE" "SDL2MIXER_VENDORED TRUE") # vendor is required for mingw builds
 find_package(SDL_mixer REQUIRED)
 include_directories(${SDL_mixer_SOURCE_DIR}/include)
 string(TIMESTAMP AFTER "%s")
