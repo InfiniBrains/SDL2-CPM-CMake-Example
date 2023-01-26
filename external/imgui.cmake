@@ -24,7 +24,9 @@ IF(IMGUI_ADDED)
             PUBLIC ${IMGUI_SOURCE_DIR}
             PUBLIC ${IMGUI_SOURCE_DIR}/backends
             )
-    target_link_libraries(IMGUI PUBLIC SDL2-static ${CMAKE_DL_LIBS})
+    find_package(OpenGL REQUIRED)
+    include_directories(OPENGL_INCLUDE_DIR)
+    target_link_libraries(IMGUI PUBLIC ${OPENGL_gl_LIBRARY} SDL2-static ${CMAKE_DL_LIBS})
 ENDIF()
 include_directories(${IMGUI_SOURCE_DIR} ${IMGUI_SOURCE_DIR}/backends)
 string(TIMESTAMP AFTER "%s")

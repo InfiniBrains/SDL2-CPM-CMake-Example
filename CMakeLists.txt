@@ -32,5 +32,9 @@ include(external/imgui.cmake)
 
 # add executable
 add_executable(demo main.cpp)
+add_executable(demo2 main2.cpp)
 
-target_link_libraries(demo PUBLIC SDL2-static SDL2_image SDL2_mixer IMGUI)
+target_link_libraries(demo PUBLIC SDL2-static SDL2_image IMGUI)
+
+find_package(OpenGL REQUIRED)
+target_link_libraries(demo2 PUBLIC ${OPENGL_gl_LIBRARY} SDL2-static SDL2_image IMGUI)
