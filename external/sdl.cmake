@@ -69,21 +69,21 @@ string(TIMESTAMP AFTER "%s")
 math(EXPR DELTASDL_image "${AFTER} - ${BEFORE}")
 MESSAGE(STATUS "SDL_image TIME: ${DELTASDL_image}s")
 
-
-## SDL_mixer
-string(TIMESTAMP BEFORE "%s")
-CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_mixer
-        GIT_TAG release-2.6.2
-        OPTIONS
-        "SDL2MIXER_INSTALL OFF"
-        "SDL2MIXER_VENDORED ON"
-        "SDL2MIXER_SAMPLES OFF"
-        "SDL2MIXER_BUILD_SHARED_LIBS OFF"
-)
-find_package(SDL_mixer REQUIRED)
-include_directories(${SDL_mixer_SOURCE_DIR}/include)
-string(TIMESTAMP AFTER "%s")
-math(EXPR DELTASDL_mixer "${AFTER} - ${BEFORE}")
-MESSAGE(STATUS "SDL_mixer TIME: ${DELTASDL_mixer}s")
+#
+### SDL_mixer
+#string(TIMESTAMP BEFORE "%s")
+#CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_mixer
+#        GIT_TAG release-2.6.2
+#        OPTIONS
+#        "SDL2MIXER_INSTALL OFF"
+#        "SDL2MIXER_VENDORED ON"
+#        "SDL2MIXER_SAMPLES OFF"
+#        "SDL2MIXER_BUILD_SHARED_LIBS OFF"
+#)
+#find_package(SDL_mixer REQUIRED)
+#include_directories(${SDL_mixer_SOURCE_DIR}/include)
+#string(TIMESTAMP AFTER "%s")
+#math(EXPR DELTASDL_mixer "${AFTER} - ${BEFORE}")
+#MESSAGE(STATUS "SDL_mixer TIME: ${DELTASDL_mixer}s")
 
 

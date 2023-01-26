@@ -40,6 +40,9 @@ jobs:
       - name: Emscripten Build
         run: ./scripts/emscripten-build.sh
 
+      - name: Clean emscripten bin assets
+        run: rm -rf bin-emscripten/bin/assets/ bin-emscripten/bin/*.a
+
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
