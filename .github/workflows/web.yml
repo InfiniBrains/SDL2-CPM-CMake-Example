@@ -25,7 +25,10 @@ jobs:
         id: cache
         uses: actions/cache@v3
         with:
-          path: /emsdk/upstream/emscripten/cache/
+          path: |
+            /emsdk/upstream/emscripten/cache/
+            bin-emscripten/_deps
+            bin-emscripten/libs
           key: emscripten
 
       - name: Rsync
