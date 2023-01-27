@@ -18,17 +18,21 @@ IF(IMGUI_ADDED)
             PRIVATE
             ${IMGUI_SOURCE_DIR}/backends/imgui_impl_sdlrenderer.cpp
             ${IMGUI_SOURCE_DIR}/backends/imgui_impl_sdl.cpp
-            ${IMGUI_SOURCE_DIR}/backends/imgui_impl_opengl2.cpp
+            ${IMGUI_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
             )
     target_include_directories( IMGUI
             PUBLIC ${IMGUI_SOURCE_DIR}
             PUBLIC ${IMGUI_SOURCE_DIR}/backends
             )
     find_package(OpenGL REQUIRED)
-    include_directories(OPENGL_INCLUDE_DIR)
-    target_link_libraries(IMGUI PUBLIC ${OPENGL_gl_LIBRARY} SDL2-static ${CMAKE_DL_LIBS})
+    if(EMSCRIPTEN)
+        target_link_libraries(IMGUI PUBLIC ${OPENGL_gl_LIBRARY} SDL2 ${CMAKE_DL_LIBS})
+    else()
+        target_link_libraries(IMGUI PUBLIC ${OPENGL_gl_LIBRARY} SDL2-static ${CMAKE_DL_LIBS})
+    endif()
 ENDIF()
 include_directories(${IMGUI_SOURCE_DIR} ${IMGUI_SOURCE_DIR}/backends)
 string(TIMESTAMP AFTER "%s")
 math(EXPR DELTAIMGUI "${AFTER} - ${BEFORE}")
 MESSAGE(STATUS "IMGUI TIME: ${DELTAIMGUI}s")
+
