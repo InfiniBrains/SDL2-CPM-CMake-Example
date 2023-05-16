@@ -15,7 +15,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 LINK_DIRECTORIES(${CMAKE_BINARY_DIR}/libs)
 
 # emscripten settings
-IF(EMSCRIPTEN)
+IF(DEFINED EMSCRIPTEN)
     message(STATUS "emscripten build")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Oz -s WASM=2 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s ASYNCIFY -s FULL_ES2=1 -s USE_GLFW=3")
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Oz -s WASM=2 -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s ASYNCIFY -s FULL_ES2=1 -s USE_GLFW=3")
@@ -27,6 +27,9 @@ ENDIF()
 # add dependencies
 include(external/compilerchecks.cmake)
 include(external/cpm.cmake)
+
+# add libraries
+include(external/glew.cmake)
 include(external/sdl.cmake)
 include(external/imgui.cmake)
 

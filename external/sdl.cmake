@@ -17,13 +17,13 @@ CPMAddPackage(
         "SDL_WERROR OFF"
 )
 find_package(SDL2 REQUIRED)
-if (SDL2_ADDED)
-    file(GLOB SDL_HEADERS "${SDL_SOURCE_DIR}/include/*.h")
+
+    file(GLOB SDL2_HEADERS "${SDL2_SOURCE_DIR}/include/*.h")
 
     # Create a target that copies headers at build time, when they change
     add_custom_target(sdl_copy_headers_in_build_dir
-            COMMAND ${CMAKE_COMMAND} -E copy_directory "${SDL_SOURCE_DIR}/include" "${CMAKE_BINARY_DIR}/SDLHeaders/SDL2"
-            DEPENDS ${SDL_HEADERS})
+            COMMAND ${CMAKE_COMMAND} -E copy_directory "${SDL2_SOURCE_DIR}/include" "${CMAKE_BINARY_DIR}/SDLHeaders/SDL2"
+            DEPENDS ${SDL2_HEADERS})
 
     # Make SDL depend from it
     add_dependencies(SDL2-static sdl_copy_headers_in_build_dir)
@@ -32,7 +32,7 @@ if (SDL2_ADDED)
     target_include_directories(SDL2-static INTERFACE "${CMAKE_BINARY_DIR}/SDLHeaders")
 
     set (SDL2_INCLUDE_DIR ${SDL2_SOURCE_DIR}/include)
-endif()
+
 include_directories(${SDL2_INCLUDE_DIR})
 string(TIMESTAMP AFTER "%s")
 math(EXPR DELTASDL "${AFTER} - ${BEFORE}")
