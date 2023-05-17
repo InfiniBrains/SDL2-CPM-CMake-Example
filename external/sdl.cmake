@@ -63,6 +63,7 @@ CPMAddPackage(GITHUB_REPOSITORY libsdl-org/SDL_image
         "SDL2IMAGE_SAMPLES OFF"
         "SDL2IMAGE_VENDORED ON"
         "SDL2IMAGE_BUILD_SHARED_LIBS OFF"
+        "GIT_SUBMODULES_RECURSE ON"
 )
 find_package(SDL_image REQUIRED)
 include_directories(${SDL_image_SOURCE_DIR})
